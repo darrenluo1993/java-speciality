@@ -4,9 +4,19 @@ import static pers.darren.speciality.Java14Test.WeekEnum.MONDAY;
 import static pers.darren.speciality.Java14Test.WeekEnum.SUNDAY;
 import static pers.darren.speciality.Java14Test.WeekEnum.TUESDAY;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
+import java.nio.charset.Charset;
+import java.util.UUID;
+
 public class Java14Test {
 
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws Exception {
         instanceofTest();
         switchTest1();
         switchTest2();
@@ -14,6 +24,7 @@ public class Java14Test {
         textBlocksTest();
         newNPETest();
         new Record("name", "desc").print();
+        httpClientTest();
     }
 
     @SuppressWarnings("preview")
@@ -105,8 +116,30 @@ public class Java14Test {
         final var testClass2 = new NPETestClass2();
         final var testClass3 = new NPETestClass3();
         testClass1.setTestClass2(testClass2);
-        // testClass2.setTestClass3(testClass3);
+        testClass2.setTestClass3(testClass3);
         System.out.println(testClass1.getTestClass2().getTestClass3().getValue());
+    }
+
+    @SuppressWarnings("preview")
+    public static void httpClientTest() throws IOException, InterruptedException {
+        Charset charset = Charset.forName("UTF-8");
+
+        HttpClient client = HttpClient.newHttpClient();
+        String requestBody = """
+                {
+                    "name": "Darren Luo",
+                    "phone": "15111184741",
+                    "email": "darrenluo1993@163.com",
+                    "address": "湖南省长沙市雨花区时代阳光大道宏聚地中海1栋1413"
+                }
+                """;
+        HttpRequest request = HttpRequest.newBuilder(URI.create("http://localhost:7777/example/httpClienTest"))
+                .setHeader("sign", UUID.randomUUID().toString())
+                .setHeader("token", UUID.randomUUID().toString())
+                .setHeader("timestamp", String.valueOf(System.currentTimeMillis()))
+                .POST(BodyPublishers.ofString(requestBody.stripIndent(), charset)).build();
+        HttpResponse<String> response = client.send(request, BodyHandlers.ofString(charset));
+        System.out.println(response.body());
     }
 
     public enum WeekEnum {
