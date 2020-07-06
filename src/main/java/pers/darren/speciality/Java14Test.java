@@ -1,30 +1,38 @@
 package pers.darren.speciality;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static pers.darren.speciality.Java14Test.WeekEnum.MONDAY;
 import static pers.darren.speciality.Java14Test.WeekEnum.SUNDAY;
 import static pers.darren.speciality.Java14Test.WeekEnum.TUESDAY;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
-import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.Charset;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 public class Java14Test {
 
+    private static final Charset GBK = Charset.forName("GBK");
+
     public static void main(final String[] args) throws Exception {
-        instanceofTest();
-        switchTest1();
-        switchTest2();
-        switchTest3();
-        textBlocksTest();
-        newNPETest();
-        new Record("name", "desc").print();
-        httpClientTest();
+        // instanceofTest();
+        // switchTest1();
+        // switchTest2();
+        // switchTest3();
+        // textBlocksTest();
+        // newNPETest();
+        // new Record("name", "desc").print();
+        // httpClientSyncTest();
+        // httpClientAsyncTest();
+        byteArrayOutputStreamToStringTest();
     }
 
     @SuppressWarnings("preview")
@@ -76,7 +84,7 @@ public class Java14Test {
 
     @SuppressWarnings("preview")
     public static void textBlocksTest() {
-        String html = """
+        final var html = """
                 <html>
                     <body>
                         <p>Hello, world</p>
@@ -84,7 +92,7 @@ public class Java14Test {
                 </html>
                 """;
         System.out.println(html);
-        String query = """
+        final var query = """
                 select
                     EMP_ID,
                     LAST_NAME
@@ -96,7 +104,7 @@ public class Java14Test {
                     EMP_ID, LAST_NAME;
                 """;
         System.out.println(query);
-        String json = """
+        final var json = """
                 {
                     "student": {
                         "name": "小明",
@@ -121,11 +129,9 @@ public class Java14Test {
     }
 
     @SuppressWarnings("preview")
-    public static void httpClientTest() throws IOException, InterruptedException {
-        Charset charset = Charset.forName("UTF-8");
-
-        HttpClient client = HttpClient.newHttpClient();
-        String requestBody = """
+    public static void httpClientSyncTest() throws IOException, InterruptedException {
+        final var client = HttpClient.newHttpClient();
+        final var requestBody = """
                 {
                     "name": "Darren Luo",
                     "phone": "15111184741",
@@ -133,13 +139,42 @@ public class Java14Test {
                     "address": "湖南省长沙市雨花区时代阳光大道宏聚地中海1栋1413"
                 }
                 """;
-        HttpRequest request = HttpRequest.newBuilder(URI.create("http://localhost:7777/example/httpClienTest"))
+        final var request = HttpRequest.newBuilder(URI.create("http://localhost:7777/example/httpClienTest"))
                 .setHeader("sign", UUID.randomUUID().toString())
                 .setHeader("token", UUID.randomUUID().toString())
                 .setHeader("timestamp", String.valueOf(System.currentTimeMillis()))
-                .POST(BodyPublishers.ofString(requestBody.stripIndent(), charset)).build();
-        HttpResponse<String> response = client.send(request, BodyHandlers.ofString(charset));
+                .POST(BodyPublishers.ofString(requestBody.stripIndent(), UTF_8)).build();
+        final var response = client.send(request, BodyHandlers.ofString(UTF_8));
         System.out.println(response.body());
+    }
+
+    @SuppressWarnings("preview")
+    public static void httpClientAsyncTest() throws InterruptedException, ExecutionException, TimeoutException {
+        final var client = HttpClient.newHttpClient();
+        final var requestBody = """
+                {
+                    "name": "Darren Luo",
+                    "phone": "15111184741",
+                    "email": "darrenluo1993@163.com",
+                    "address": "湖南省长沙市雨花区时代阳光大道宏聚地中海1栋1413"
+                }
+                """;
+        final var request = HttpRequest.newBuilder(URI.create("http://localhost:7777/example/httpClienTest"))
+                .setHeader("sign", UUID.randomUUID().toString())
+                .setHeader("token", UUID.randomUUID().toString())
+                .setHeader("timestamp", String.valueOf(System.currentTimeMillis()))
+                .POST(BodyPublishers.ofString(requestBody.stripIndent(), UTF_8)).build();
+        final var future = client.sendAsync(request, BodyHandlers.ofString(UTF_8));
+        final var response = future.get(30, SECONDS);
+        System.out.println(response.body());
+    }
+
+    public static void byteArrayOutputStreamToStringTest() throws IOException {
+        String value = "测试 ByteArrayOutputStream.toString()";
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        stream.write(value.getBytes(GBK));
+        System.out.println(stream.toString());
+        System.out.println(stream.toString(GBK));
     }
 
     public enum WeekEnum {
