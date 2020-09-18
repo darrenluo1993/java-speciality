@@ -75,7 +75,7 @@ public class Java14Test {
             case SATURDAY, SUNDAY -> {
                 System.out.println("今天是节假日");
                 // 通过yield指定表达式的返回结果
-                yield "工作日";
+                yield "节假日";
             }
             default -> "参数错误";
         };
