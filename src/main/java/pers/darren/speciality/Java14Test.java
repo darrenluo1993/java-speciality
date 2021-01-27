@@ -82,7 +82,6 @@ public class Java14Test {
         System.out.println(weekDesc);
     }
 
-    @SuppressWarnings("preview")
     public static void textBlocksTest() {
         final var html = """
                 <html>
@@ -128,7 +127,6 @@ public class Java14Test {
         System.out.println(testClass1.getTestClass2().getTestClass3().getValue());
     }
 
-    @SuppressWarnings("preview")
     public static void httpClientSyncTest() throws IOException, InterruptedException {
         final var client = HttpClient.newHttpClient();
         final var requestBody = """
@@ -148,7 +146,6 @@ public class Java14Test {
         System.out.println(response.body());
     }
 
-    @SuppressWarnings("preview")
     public static void httpClientAsyncTest() throws InterruptedException, ExecutionException, TimeoutException {
         final var client = HttpClient.newHttpClient();
         final var requestBody = """
@@ -221,7 +218,7 @@ public class Java14Test {
     }
 
     @SuppressWarnings("preview")
-    public static record Record(final String name, final String desc) {
+    public static record Record(String name, String desc) {
         public void print() {
             System.out.println(this.name + "===" + this.desc());
         }
