@@ -172,6 +172,8 @@ public class Java14Test {
         stream.write(value.getBytes(GBK));
         System.out.println(stream.toString());
         System.out.println(stream.toString(GBK));
+        System.out.println(new String(stream.toByteArray()));
+        System.out.println(new String(stream.toByteArray(), "GBK"));
     }
 
     public enum WeekEnum {
