@@ -132,9 +132,9 @@ public class Java14Test {
         final var requestBody = """
                 {
                     "name": "Darren Luo",
-                    "phone": "15111184741",
-                    "email": "darrenluo1993@163.com",
-                    "address": "湖南省长沙市雨花区时代阳光大道宏聚地中海1栋1413"
+                    "phone": "15188889999",
+                    "email": "darrenluo8888@163.com",
+                    "address": "湖南省长沙市天心区湘江中路二段210号湖南银行总部大厦"
                 }
                 """;
         final var request = HttpRequest.newBuilder(URI.create("http://localhost:7777/example/httpClienTest"))
@@ -151,9 +151,9 @@ public class Java14Test {
         final var requestBody = """
                 {
                     "name": "Darren Luo",
-                    "phone": "15111184741",
-                    "email": "darrenluo1993@163.com",
-                    "address": "湖南省长沙市雨花区时代阳光大道宏聚地中海1栋1413"
+                    "phone": "15188889999",
+                    "email": "darrenluo8888@163.com",
+                    "address": "湖南省长沙市天心区湘江中路二段210号湖南银行总部大厦"
                 }
                 """;
         final var request = HttpRequest.newBuilder(URI.create("http://localhost:7777/example/httpClienTest"))
