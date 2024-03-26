@@ -16,14 +16,14 @@ public class Java20Test {
     static void noRecordPatterns(Shape circle) {
         if (circle instanceof Shape shape) {
             System.out.print("No Record Patterns, ");
-            System.out.println("Area of " + shape.type() + " is : " + Math.PI * Math.pow(shape.unit(), 2));
+            System.out.println(STR."Area of \{shape.type()} is : \{Math.PI * Math.pow(shape.unit(), 2)}");
         }
     }
 
     static void recordPatterns(Shape circle) {
         if (circle instanceof Shape(String type, long unit)) {
             System.out.print("Record Patterns, ");
-            System.out.println("Area of " + type + " is : " + Math.PI * Math.pow(unit, 2));
+            System.out.println(STR."Area of \{type} is : \{Math.PI * Math.pow(unit, 2)}");
         }
     }
 
